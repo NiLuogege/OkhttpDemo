@@ -100,7 +100,7 @@ class OkHttpTest {
   fun testRequest() {
     assumeNetwork()
 
-    val request = Request.Builder().url("https://api.twitter.com/robots.txt").build()
+    val request = Request.Builder().url("http://test1.bff-s.t.eshetang.com/post/mobile/home").build()
 
     val response = client.newCall(request).execute()
 
