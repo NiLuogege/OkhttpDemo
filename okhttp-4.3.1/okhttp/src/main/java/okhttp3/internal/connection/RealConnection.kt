@@ -495,6 +495,8 @@ class RealConnection(
   /**
    * Returns true if this connection can carry a stream allocation to `address`. If non-null
    * `route` is the resolved route for a connection.
+   *
+   *判断链接是否可以被复用
    */
   internal fun isEligible(address: Address, routes: List<Route>?): Boolean {
     // If this connection is not accepting new exchanges, we're done.

@@ -55,6 +55,7 @@ internal class RealCall private constructor(
 
   override fun request(): Request = originalRequest
 
+  //同步调用
   override fun execute(): Response {
     synchronized(this) {
       check(!executed) { "Already Executed" }
@@ -64,12 +65,14 @@ internal class RealCall private constructor(
     transmitter.callStart()
     try {
       client.dispatcher.executed(this)
+      //直接执行 拦截器链 返回结果
       return getResponseWithInterceptorChain()
     } finally {
       client.dispatcher.finished(this)
     }
   }
 
+  //异步调用 ，通过Dispatcher 中的线程池 调用最终调用  本类的 run方法
   override fun enqueue(responseCallback: Callback) {
     synchronized(this) {
       check(!executed) { "Already Executed" }

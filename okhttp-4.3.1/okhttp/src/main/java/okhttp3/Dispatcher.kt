@@ -121,6 +121,7 @@ class Dispatcher constructor() {
         if (existingCall != null) call.reuseCallsPerHostFrom(existingCall)
       }
     }
+    //加入到线程池中执行
     promoteAndExecute()
   }
 
