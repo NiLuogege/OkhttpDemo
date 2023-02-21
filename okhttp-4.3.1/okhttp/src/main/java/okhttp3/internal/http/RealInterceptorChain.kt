@@ -104,11 +104,13 @@ class RealInterceptorChain(
     }
 
     // Call the next interceptor in the chain.
+    //调用下一个拦截器
     val next = RealInterceptorChain(interceptors, transmitter, exchange,
         index + 1, request, call, connectTimeout, readTimeout, writeTimeout)
     val interceptor = interceptors[index]
 
     @Suppress("USELESS_ELVIS")
+    //开始责任链调用
     val response = interceptor.intercept(next) ?: throw NullPointerException(
         "interceptor $interceptor returned null")
 

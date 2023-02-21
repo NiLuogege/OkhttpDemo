@@ -183,6 +183,7 @@ abstract class ResponseBody : Closeable {
    * possibility for your response.
    */
   @Throws(IOException::class)
+  //.use 在流读完以后会将流关闭掉，这也就是为什么这个方法只能调用一次的原因
   fun string(): String = source().use { source ->
     source.readString(charset = source.readBomAsCharset(charset()))
   }

@@ -21,7 +21,11 @@ import okhttp3.Response
 import okhttp3.internal.http.RealInterceptorChain
 import java.io.IOException
 
-/** Opens a connection to the target server and proceeds to the next interceptor. */
+/** Opens a connection to the target server and proceeds to the next interceptor.
+ *
+ * 打开 or 复用一个链接 然后最近下一个拦截器
+ *
+ * */
 object ConnectInterceptor : Interceptor {
 
   @Throws(IOException::class)
@@ -34,6 +38,7 @@ object ConnectInterceptor : Interceptor {
     val doExtensiveHealthChecks = request.method != "GET"
     val exchange = transmitter.newExchange(chain, doExtensiveHealthChecks)
 
+    //执行下一个拦截器
     return realChain.proceed(request, transmitter, exchange)
   }
 }

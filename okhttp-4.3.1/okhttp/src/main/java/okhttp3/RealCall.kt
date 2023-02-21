@@ -189,11 +189,13 @@ internal class RealCall private constructor(
     //用于连接的拦截器
     interceptors += ConnectInterceptor
     if (!forWebSocket) {
+      //添加 网络拦截器
       interceptors += client.networkInterceptors
     }
     //真正请求网络的拦截器
     interceptors += CallServerInterceptor(forWebSocket)
 
+    //创建一个 责任链 RealInterceptorChain
     val chain = RealInterceptorChain(interceptors, transmitter, null, 0, originalRequest, this,
         client.connectTimeoutMillis, client.readTimeoutMillis, client.writeTimeoutMillis)
 
