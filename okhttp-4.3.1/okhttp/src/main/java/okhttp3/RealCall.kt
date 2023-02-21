@@ -116,6 +116,7 @@ internal class RealCall private constructor(
 
       var success = false
       try {
+        //开始执行
         executorService.execute(this)
         success = true
       } catch (e: RejectedExecutionException) {
@@ -135,6 +136,7 @@ internal class RealCall private constructor(
         var signalledCallback = false
         transmitter.timeoutEnter()
         try {
+          //获取一组拦截器，这是核心代码
           val response = getResponseWithInterceptorChain()
           signalledCallback = true
           responseCallback.onResponse(this@RealCall, response)
@@ -176,14 +178,20 @@ internal class RealCall private constructor(
   fun getResponseWithInterceptorChain(): Response {
     // Build a full stack of interceptors.
     val interceptors = mutableListOf<Interceptor>()
+    //自定义的拦截器
     interceptors += client.interceptors
+    //重试和重定向的拦截器
     interceptors += RetryAndFollowUpInterceptor(client)
+    //用于桥接 Request 和 Response 的拦截器
     interceptors += BridgeInterceptor(client.cookieJar)
+    //处理缓存的拦截器，主要是通过 响应头的 Cache-Control 来设置
     interceptors += CacheInterceptor(client.cache)
+    //用于连接的拦截器
     interceptors += ConnectInterceptor
     if (!forWebSocket) {
       interceptors += client.networkInterceptors
     }
+    //真正请求网络的拦截器
     interceptors += CallServerInterceptor(forWebSocket)
 
     val chain = RealInterceptorChain(interceptors, transmitter, null, 0, originalRequest, this,

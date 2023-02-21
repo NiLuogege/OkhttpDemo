@@ -90,6 +90,7 @@ class Dispatcher constructor() {
   @get:JvmName("executorService") val executorService: ExecutorService
     get() {
       if (executorServiceOrNull == null) {
+        //创建一个线程池 核心数为0 ，无限制线程数
         executorServiceOrNull = ThreadPoolExecutor(0, Int.MAX_VALUE, 60, TimeUnit.SECONDS,
             SynchronousQueue(), threadFactory("OkHttp Dispatcher", false))
       }

@@ -160,6 +160,7 @@ class Transmitter(
       }
     }
 
+    //进行查找
     val codec = exchangeFinder!!.find(client, chain, doExtensiveHealthChecks)
     val result = Exchange(this, call, eventListener, exchangeFinder!!, codec)
 

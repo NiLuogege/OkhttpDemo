@@ -163,6 +163,8 @@ class Address(
       level = DeprecationLevel.ERROR)
   fun certificatePinner() = certificatePinner
 
+  //判定两个访问地址是否一致，如果一致则可以复用链接
+  //主要是判断 域名 ，端口号 ，代理 等需要一致
   override fun equals(other: Any?): Boolean {
     return other is Address &&
         url == other.url &&

@@ -89,6 +89,7 @@ class CacheInterceptor(internal val cache: Cache?) : Interceptor {
 
     // If we have a cache response too, then we're doing a conditional get.
     if (cacheResponse != null) {
+      //服务器要求使用 缓存
       if (networkResponse?.code == HTTP_NOT_MODIFIED) {
         val response = cacheResponse.newBuilder()
             .headers(combine(cacheResponse.headers, networkResponse.headers))

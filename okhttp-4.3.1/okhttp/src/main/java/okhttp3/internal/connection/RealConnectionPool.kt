@@ -45,6 +45,7 @@ class RealConnectionPool(
     override fun runOnce() = cleanup(System.nanoTime())
   }
 
+  //缓存的链接
   private val connections = ArrayDeque<RealConnection>()
   val routeDatabase = RouteDatabase()
 
@@ -68,6 +69,9 @@ class RealConnectionPool(
    * If [routes] is non-null these are the resolved routes (ie. IP addresses) for the connection.
    * This is used to coalesce related domains to the same HTTP/2 connection, such as `square.com`
    * and `square.ca`.
+   *
+   * 尝试从连接池中  是否能找到可以复用的链接
+   * 如果能找到 则会保持到 transmitter.connection 中
    */
   fun transmitterAcquirePooledConnection(
     address: Address,
@@ -80,6 +84,7 @@ class RealConnectionPool(
     for (connection in connections) {
       if (requireMultiplexed && !connection.isMultiplexed) continue
       if (!connection.isEligible(address, routes)) continue
+      //将可用链接保存到 transmitter 的 connection 字段中
       transmitter.acquireConnectionNoEvents(connection)
       return true
     }

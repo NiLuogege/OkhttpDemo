@@ -33,6 +33,7 @@ class CallServerInterceptor(private val forWebSocket: Boolean) : Interceptor {
     val requestBody = request.body
     val sentRequestMillis = System.currentTimeMillis()
 
+    //写入请求头
     exchange.writeRequestHeaders(request)
 
     var invokeStartEvent = true

@@ -170,8 +170,11 @@ class ExchangeFinder(
 
       if (result == null) {
         // Attempt to get a connection from the pool.
+        //尝试从连接池中  是否能找到可以复用的链接 可以复用指的是 address对象要一直，主要是判断  域名 ，端口号 ，代理 等需要一致
         if (connectionPool.transmitterAcquirePooledConnection(address, transmitter, null, false)) {
+          //找到了一个 可用链接
           foundPooledConnection = true
+          //拿到那个可用链接（之前已经保存到 transmitter.connection 中了）
           result = transmitter.connection
         } else if (nextRouteToTry != null) {
           selectedRoute = nextRouteToTry
@@ -189,6 +192,7 @@ class ExchangeFinder(
     if (foundPooledConnection) {
       eventListener.connectionAcquired(call, result!!)
     }
+    //如果找到则直接返回了 ，没有的话 下面会创建一个 链接
     if (result != null) {
       // If we found an already-allocated or pooled connection, we're done.
       return result!!
@@ -223,6 +227,7 @@ class ExchangeFinder(
 
         // Create a connection and assign it to this allocation immediately. This makes it possible
         // for an asynchronous cancel() to interrupt the handshake we're about to do.
+        //创建一个 链接 RealConnection
         result = RealConnection(connectionPool, selectedRoute!!)
         connectingConnection = result
       }
@@ -235,6 +240,7 @@ class ExchangeFinder(
     }
 
     // Do TCP + TLS handshakes. This is a blocking operation.
+    //进行 tcp 握手 和 TLS 握手
     result!!.connect(
         connectTimeout,
         readTimeout,

@@ -221,6 +221,7 @@ class RetryAndFollowUpInterceptor(private val client: OkHttpClient) : Intercepto
         return buildRedirectRequest(userResponse, method)
       }
 
+      //进行重定向
       HTTP_MULT_CHOICE, HTTP_MOVED_PERM, HTTP_MOVED_TEMP, HTTP_SEE_OTHER -> {
         return buildRedirectRequest(userResponse, method)
       }
