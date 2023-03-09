@@ -54,6 +54,7 @@ class RetryAndFollowUpInterceptor(private val client: OkHttpClient) : Intercepto
   @Throws(IOException::class)
   override fun intercept(chain: Interceptor.Chain): Response {
     var request = chain.request()
+    //获取 RealInterceptorChain
     val realChain = chain as RealInterceptorChain
     val transmitter = realChain.transmitter()
     var followUpCount = 0
@@ -68,6 +69,7 @@ class RetryAndFollowUpInterceptor(private val client: OkHttpClient) : Intercepto
       var response: Response
       var success = false
       try {
+        //执行下一个 RealInterceptorChain 的  proceed方法
         response = realChain.proceed(request, transmitter, null)
         success = true
       } catch (e: RouteException) {

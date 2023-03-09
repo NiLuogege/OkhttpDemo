@@ -79,6 +79,7 @@ class CacheInterceptor(internal val cache: Cache?) : Interceptor {
 
     var networkResponse: Response? = null
     try {
+      //其实就是 RealInterceptorChain ，会调用到 RealInterceptorChain.proceed 方法，进入下一个拦截器
       networkResponse = chain.proceed(networkRequest)
     } finally {
       // If we're crashing on I/O or otherwise, don't leak the cache body.

@@ -204,6 +204,7 @@ internal class RealCall private constructor(
 
     var calledNoMoreExchanges = false
     try {
+      //执行 联调的 proceed 方法，
       val response = chain.proceed(originalRequest)
       if (transmitter.isCanceled) {
         response.closeQuietly()

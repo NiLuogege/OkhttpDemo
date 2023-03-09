@@ -32,8 +32,11 @@ import java.util.concurrent.TimeUnit
  *
  * If the chain is for an application interceptor then [connection] must be null.
  * Otherwise it is for a network interceptor and [connection] must be non-null.
+ *
+ * 一个拦截器链
  */
 class RealInterceptorChain(
+  //这里就是所有的拦截器
   private val interceptors: List<Interceptor>,
   private val transmitter: Transmitter,
   private val exchange: Exchange?,
@@ -104,13 +107,15 @@ class RealInterceptorChain(
     }
 
     // Call the next interceptor in the chain.
-    //调用下一个拦截器
+    //创建一个新的责任链 ，创建的时候 index 会 + 1 ，也就是说下次如果调用 这个新的 RealInterceptorChain 的 第index+1 个拦截器
     val next = RealInterceptorChain(interceptors, transmitter, exchange,
         index + 1, request, call, connectTimeout, readTimeout, writeTimeout)
+    //依次获取拦截器 ，index 是构造方法中传过来的
     val interceptor = interceptors[index]
 
     @Suppress("USELESS_ELVIS")
     //开始责任链调用
+    //执行这个拦截器的 intercept 方法
     val response = interceptor.intercept(next) ?: throw NullPointerException(
         "interceptor $interceptor returned null")
 
